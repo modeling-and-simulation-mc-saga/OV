@@ -15,7 +15,7 @@ import rungeKutta.RungeKutta;
 public class OV {
 
     final private double circuitLength;//コース長
-    private int numCar;//車両数
+    private int numCars;//車両数
     private List<Car> cars;//車両リスト
     private double t;//時刻
     private DifferentialEquations equation;//微分方程式
@@ -41,14 +41,14 @@ public class OV {
      */
     public void ovInit() {
         cars = Collections.synchronizedList(new ArrayList<>());
-        double dr = circuitLength / numCar;//初期の車頭距離
-        for (int i = 0; i < numCar; i++) {
+        double dr = circuitLength / numCars;//初期の車頭距離
+        for (int i = 0; i < numCars; i++) {
             Car car = new Car();
             car.setValues(i * dr, 0.);
             cars.add(car);
         }
         //一台だけ位置をずらす
-        int ii = (int) (0.4 * numCar);
+        int ii = (int) (0.4 * numCars);
         if (ii >= 0 && ii < cars.size()) {
             cars.get(ii).setValues(ii * dr - 0.2 * dr, 0.);//摂動
         }
@@ -57,9 +57,9 @@ public class OV {
         //微分方程式を構成
         //偶数番要素は位置、奇数番要素は速度
         equation = (double td, double y[]) -> {
-            double dy[] = new double[2 * numCar];
-            for (int i = 0; i < numCar; i++) {
-                int j = (i + 1) % numCar;
+            double dy[] = new double[2 * numCars];
+            for (int i = 0; i < numCars; i++) {
+                int j = (i + 1) % numCars;
                 double headway = y[2 * j] - y[2 * i];
                 headway = (headway + circuitLength) % circuitLength;
                 dy[2 * i + 1] = alpha * (ovFunction.apply(headway) - y[2 * i + 1]);
@@ -77,8 +77,8 @@ public class OV {
      */
     public void updateState(double dt, int tstep) {
         //RungeKutta法の利用
-        double y[] = new double[2 * numCar];
-        for (int i = 0; i < numCar; i++) {
+        double y[] = new double[2 * numCars];
+        for (int i = 0; i < numCars; i++) {
             y[2 * i] = cars.get(i).readPosition() % circuitLength;
             y[2 * i + 1] = cars.get(i).readSpeed();
         }
@@ -87,10 +87,10 @@ public class OV {
         //各車両の位置及び速度として保存
         cars.stream().forEach(c -> c.saveValues());
 
-        for (int i = 0; i < numCar; i++) {
+        for (int i = 0; i < numCars; i++) {
             cars.get(i).setX(yy[2 * i][tstep - 1] % circuitLength);
             cars.get(i).setV(yy[2 * i + 1][tstep - 1]);
-            int j = (i + 1) % numCar;
+            int j = (i + 1) % numCars;
             double headway = yy[2 * j][tstep - 1] - yy[2 * i][tstep - 1];
             headway = (headway + circuitLength) % circuitLength;
             cars.get(i).setDx(headway);
@@ -110,23 +110,23 @@ public class OV {
     /**
      * 車両数を変更
      *
-     * @param numCar
+     * @param numCars
      */
-    public void changeNumCar(int numCar) {
-        this.numCar = numCar;
+    public void changeNumCars(int numCars) {
+        this.numCars = numCars;
         cars = null;
         ovInit();
     }
 
-    public int getNumCar() {
-        return numCar;
+    public int getNumCars() {
+        return numCars;
     }
 
     public double getCircuitLength() {
         return circuitLength;
     }
 
-    public Car getCar(int i) {
+    public Car getCars(int i) {
         return cars.get(i);
     }
 

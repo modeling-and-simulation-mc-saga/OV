@@ -33,7 +33,7 @@ public class Fundamental {
         int num = numCarFrom;
         List<Point2D.Double> data = Utils.createList();
         while (num < numCarTo) {
-            ov.changeNumCar(num);
+            ov.changeNumCars(num);
             ov.ovInit();
             for (int i = 0; i < tLength; i++) {
                 ov.updateState(dt, tstep);

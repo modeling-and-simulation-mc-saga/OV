@@ -30,7 +30,7 @@ public class HV {
         List<Point2D.Double> plist = Utils.createList();
         for (int i = 0; i < 10000; i++) {
             ov.updateState(dt,tstep);
-            Car car = ov.getCar(0);
+            Car car = ov.getCars(0);
             plist.add(new Point2D.Double(car.readHeadway(), car.readSpeed()));
         }
         return plist;
