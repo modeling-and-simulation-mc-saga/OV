@@ -7,12 +7,7 @@ import java.util.function.DoubleFunction;
  *
  * @author tadaki
  */
-public class Tanh extends Simulation {
-
-    public Tanh(DoubleFunction ovfunction,
-            int length, int numCar, double alpha) {
-        super(ovfunction, length, numCar, alpha);
-    }
+public class Tanh  {
 
     public static double tanh(double y) {
         if (y > 0) {
@@ -38,13 +33,13 @@ public class Tanh extends Simulation {
         int numCar = 40;
         DoubleFunction<Double> ovfunction
                 = x -> 0.5*vmax * (tanh(2. * (x - d) / w) + c);
-        Tanh sys = new Tanh(ovfunction, length, numCar, alpha);
-//        sys.relax(10*tmax);
-//        sys.spacetime("Tanh-spacetime.txt");
-//        sys.hv("Tanh-hv.txt");
+        Simulation sys = new Simulation(ovfunction, length, numCar, alpha);
+        sys.relax(10*tmax);
+        sys.spacetime("Tanh-spacetime.txt");
+        sys.hv("Tanh-hv.txt");
         tmax*=10;
         sys.tmax=tmax;
-        sys.fundamental(Tanh.class.getSimpleName()+"-fundamental.txt", 5, 100, 5, 10);
+//        sys.fundamental(Tanh.class.getSimpleName()+"-fundamental.txt", 5, 100, 5, 10);
     }
 
 }

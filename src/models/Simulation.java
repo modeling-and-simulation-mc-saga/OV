@@ -8,7 +8,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.function.DoubleFunction;
-import myLib.FileIO;
+import myLib.utils.FileIO;
 
 /**
  * OV モデルのシミュレーション

@@ -7,12 +7,9 @@ import java.util.function.DoubleFunction;
  *
  * @author tadaki
  */
-public class Step extends Simulation {
+public class Step {
 
-    public Step(DoubleFunction ovfunction,
-            int length, int numCar, double alpha) {
-        super(ovfunction, length, numCar, alpha);
-    }
+
 
     /**
      * @param args the command line arguments
@@ -33,9 +30,9 @@ public class Step extends Simulation {
                     }
                     return v;
                 };
-        Step sys = new Step(ovfunction, length, numCar, alpha);
-        sys.spacetime(Step.class.getSimpleName()+"-spacetime.txt");
-        sys.hv(Step.class.getSimpleName()+"-hv.txt");
+        Simulation sys = new Simulation(ovfunction, length, numCar, alpha);
+        sys.spacetime("Step-spacetime.txt");
+        sys.hv("Step-hv.txt");
 //        sys.fundamental("Step-fundamental.txt", 10, 190, 10, 100);
     }
 
