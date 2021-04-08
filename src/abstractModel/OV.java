@@ -41,6 +41,7 @@ public class OV {
      */
     public void ovInit() {
         cars = Collections.synchronizedList(new ArrayList<>());
+        //はじめに等間隔に停止車両を置く
         double dr = circuitLength / numCars;//初期の車頭距離
         for (int i = 0; i < numCars; i++) {
             Car car = new Car();
@@ -101,9 +102,7 @@ public class OV {
 
     public List<Double> getSpeedList() {
         List<Double> list = Collections.synchronizedList(new ArrayList<>());
-        cars.stream().forEach((c) -> {
-            boolean add = list.add(c.readSpeed());
-        });
+        cars.forEach(c -> list.add(c.readSpeed()));
         return list;
     }
 

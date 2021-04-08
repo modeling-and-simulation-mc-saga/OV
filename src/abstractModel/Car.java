@@ -2,17 +2,19 @@ package abstractModel;
 
 /**
  * ある時間間隔で位置と速度を保存するためのクラス
+ *
  * @author tadaki
  */
 public class Car {
-    
+
     protected double x;
     protected double xPrevious; //位置
     protected double v;
     protected double vPrevious; //速度
     protected double dx;//車頭距離
 
-    public Car(){}
+    public Car() {
+    }
 
     public void setValues(double xi, double vi) {
         x = xi;
