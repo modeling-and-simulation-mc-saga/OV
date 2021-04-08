@@ -4,7 +4,7 @@ import abstractModel.Car;
 import abstractModel.OV;
 import java.awt.geom.Point2D;
 import java.util.List;
-import myLib.Utils;
+import myLib.utils.Utils;
 
 /**
  * headway-velocity
