@@ -1,4 +1,4 @@
-package models;
+package simulations;
 
 import java.io.IOException;
 import java.util.function.DoubleFunction;
@@ -8,8 +8,6 @@ import java.util.function.DoubleFunction;
  * @author tadaki
  */
 public class Step {
-
-
 
     /**
      * @param args the command line arguments
@@ -31,6 +29,7 @@ public class Step {
                     return v;
                 };
         Simulation sys = new Simulation(ovfunction, length, numCar, alpha);
+        sys.relax(10 * tmax);
         sys.spacetime("Step-spacetime.txt");
         sys.hv("Step-hv.txt");
 //        sys.fundamental("Step-fundamental.txt", 10, 190, 10, 100);

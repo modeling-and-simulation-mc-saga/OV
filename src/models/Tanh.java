@@ -1,4 +1,4 @@
-package models;
+package simulations;
 
 import java.io.IOException;
 import java.util.function.DoubleFunction;
@@ -24,7 +24,7 @@ public class Tanh  {
     public static void main(String args[]) throws IOException {
         int length = 1000;
         int tmax = 1000;
-        //高速道路対応
+        //parameters are for expressways
         double vmax = 33.6;
         final double d = 25.;
         final double w = 23.3;
