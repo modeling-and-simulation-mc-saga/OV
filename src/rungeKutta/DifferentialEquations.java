@@ -1,7 +1,8 @@
 package rungeKutta;
 
 /**
- * 連立微分方程式
+ * Interface for describing a set of differential equations
+ *
  * @author tadaki
  */
 @FunctionalInterface
@@ -9,9 +10,10 @@ public interface DifferentialEquations {
 
     /**
      *
-     * @param t 独立変数
-     * @param y 従属変数
-     * @return 微分方程式の右辺の値
+     * @param t independent variable
+     * @param y dependent variables
+     * @return RHSs of differential equations
      */
-    public double[] apply(double t, double y[]);
+    public double[] rhs(double t, double y[]);
+
 }

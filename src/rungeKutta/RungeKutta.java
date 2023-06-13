@@ -8,28 +8,28 @@ package rungeKutta;
 public class RungeKutta {
 
     /**
-     * t から t + h へ、一ステップ進める
+     * One step from x to x + h
      *
-     * @param t 独立変数の初期値
-     * @param y 従属変数の初期値
-     * @param h 独立変数の変化
-     * @param eq 微分方程式のクラス
-     * @return t+hにおける従属変数の値
+     * @param t initial value of independent variable
+     * @param y initial values of dependent variables
+     * @param h change in independent variable
+     * @param eq differential equations
+     * @return dependent variables at t + h
      */
     public static double[] rk4(
             double t, double y[], double h, DifferentialEquations eq) {
         int n = y.length;
         double hh = h / 2.;
         double h6 = h / 6.;
-        double k1[] = eq.apply(t, y);
+        double k1[] = eq.rhs(t, y);
         double xh = t + hh;
         double yt[] = new double[n];
         for (int i = 0; i < n; i++) {  yt[i] = y[i] + hh * k1[i];  }
-        double k2[] = eq.apply(xh, yt);
+        double k2[] = eq.rhs(xh, yt);
         for (int i = 0; i < n; i++) {  yt[i] = y[i] + hh * k2[i];  }
-        double k3[] = eq.apply(xh, yt);
+        double k3[] = eq.rhs(xh, yt);
         for (int i = 0; i < n; i++) {  yt[i] = y[i] + h * k3[i]; }
-        double k4[] = eq.apply(t + h, yt);
+        double k4[] = eq.rhs(t + h, yt);
         double yy[] = new double[n];
         for (int i = 0; i < n; i++) {
             yy[i] = y[i] + h6 * (k1[i] + 2. * k2[i] + 2. * k3[i] + k4[i]);
@@ -38,14 +38,14 @@ public class RungeKutta {
     }
 
     /**
-     * t1からt2までnstepで進める
+     * solve by rk4 from x1 to x2 with nstep
      *
-     * @param vstart 従属変数の初期値
-     * @param t1 独立変数の初期値
-     * @param t2 独立変数の終端値
-     * @param nstep t1からt2への刻み数
-     * @param eq 微分方程式のクラス
-     * @return t2における従属変数の値
+     * @param vstart start values of dependent valiables
+     * @param t1 initial value of independent valiable
+     * @param t2 final value of independent valiable
+     * @param nstep the number of steps between t1 and t3
+     * @param eq Differential equation
+     * @return dependent variables at t2
      */
     public static double[][] rkdumb(
             double vstart[], double t1, double t2, int nstep,
