@@ -1,17 +1,17 @@
 package abstractModel;
 
 /**
- * ある時間間隔で位置と速度を保存するためのクラス
+ * Car class storeing position and speed
  *
  * @author tadaki
  */
 public class Car {
 
-    protected double x;
-    protected double xPrevious; //位置
-    protected double v;
-    protected double vPrevious; //速度
-    protected double dx;//車頭距離
+    protected double x;//position
+    protected double xPrevious; //position at the previous time
+    protected double v;//speed
+    protected double vPrevious; //speed at the previous time
+    protected double dx;//headway distance
 
     public Car() {
     }
@@ -24,13 +24,15 @@ public class Car {
     }
 
     /**
-     * 現在の値を保存する
+     * storing current values
      */
     public void saveValues() {
         xPrevious = x;
         vPrevious = v;
     }
 
+    //***** getters and setters
+    
     public void setX(double x) {
         this.x = x;
     }
@@ -43,23 +45,23 @@ public class Car {
         this.dx = dx;
     }
 
-    public double readPosition() {
+    public double getPosition() {
         return x;
     }
 
-    public double readSpeed() {
+    public double getSpeed() {
         return v;
     }
 
-    public double readPreviousPosition() {
+    public double getPreviousPosition() {
         return xPrevious;
     }
 
-    public double readPreviousSpeed() {
+    public double getPreviousSpeed() {
         return vPrevious;
     }
 
-    public double readHeadway() {
+    public double getHeadway() {
         return dx;
     }
 

@@ -8,22 +8,22 @@ import rungeKutta.DifferentialEquations;
 import rungeKutta.RungeKutta;
 
 /**
- * 最適速度交通流モデル
+ * Optimal Velocity traffic flow model
  *
  * @author tadaki
  */
 public class OV {
 
-    final private double circuitLength;//コース長
-    private int numCars;//車両数
-    private List<Car> cars;//車両リスト
-    private double t;//時刻
-    private DifferentialEquations equation;//微分方程式
-    protected double alpha;//感受率
-    protected DoubleFunction<Double> ovFunction;//最適速度関数
+    final private double circuitLength;//Circuit length
+    private int numCars;//the number of cars
+    private List<Car> cars;//car list
+    private double t;//time
+    private DifferentialEquations equation;
+    protected double alpha;//susceptibility
+    protected DoubleFunction<Double> ovFunction;//OV function
 
     /**
-     * circuitの長さを指定して初期化
+     * Initialize by specifying circuit length
      *
      * @param circuitLength
      * @param alpha
@@ -37,33 +37,34 @@ public class OV {
     }
 
     /**
-     * 初期状態生成
+     * initialize car configuration
      */
     public void ovInit() {
         cars = Collections.synchronizedList(new ArrayList<>());
-        //はじめに等間隔に停止車両を置く
-        double dr = circuitLength / numCars;//初期の車頭距離
+        //placing cars with equal headway distance
+        double dr = circuitLength / numCars;
         for (int i = 0; i < numCars; i++) {
             Car car = new Car();
             car.setValues(i * dr, 0.);
             cars.add(car);
         }
-        //一台だけ位置をずらす
+        //only one car changes position slightly
         int ii = (int) (0.4 * numCars);
         if (ii >= 0 && ii < cars.size()) {
-            cars.get(ii).setValues(ii * dr - 0.2 * dr, 0.);//摂動
+            cars.get(ii).setValues(ii * dr - 0.2 * dr, 0.);
         }
 
         t = 0.;
-        //微分方程式を構成
-        //偶数番要素は位置、奇数番要素は速度
+        //Differential equations
+        //even: position, odd:speed
         equation = (double td, double y[]) -> {
             double dy[] = new double[2 * numCars];
             for (int i = 0; i < numCars; i++) {
                 int j = (i + 1) % numCars;
                 double headway = y[2 * j] - y[2 * i];
                 headway = (headway + circuitLength) % circuitLength;
-                dy[2 * i + 1] = alpha * (ovFunction.apply(headway) - y[2 * i + 1]);
+                dy[2 * i + 1] = alpha * (
+                        ovFunction.apply(headway) - y[2 * i + 1]);
                 dy[2 * i] = y[2 * i + 1];
             }
             return dy;
@@ -71,21 +72,22 @@ public class OV {
     }
 
     /**
-     * 状態更新 : dtをtstepに分割して積分
+     * integrating differential equation
+     * 
+     * duration dt devided by tstep
      *
      * @param dt
      * @param tstep
      */
     public void updateState(double dt, int tstep) {
-        //RungeKutta法の利用
         double y[] = new double[2 * numCars];
         for (int i = 0; i < numCars; i++) {
-            y[2 * i] = cars.get(i).readPosition() % circuitLength;
-            y[2 * i + 1] = cars.get(i).readSpeed();
+            y[2 * i] = cars.get(i).getPosition() % circuitLength;
+            y[2 * i + 1] = cars.get(i).getSpeed();
         }
         double yy[][] = RungeKutta.rkdumb(y, 0, dt, tstep, equation);
 
-        //各車両の位置及び速度として保存
+        //storing position and speed
         cars.stream().forEach(c -> c.saveValues());
 
         for (int i = 0; i < numCars; i++) {
@@ -102,12 +104,12 @@ public class OV {
 
     public List<Double> getSpeedList() {
         List<Double> list = Collections.synchronizedList(new ArrayList<>());
-        cars.forEach(c -> list.add(c.readSpeed()));
+        cars.forEach(c -> list.add(c.getSpeed()));
         return list;
     }
 
     /**
-     * 車両数を変更
+     * changing the number of cars
      *
      * @param numCars
      */
@@ -117,6 +119,8 @@ public class OV {
         ovInit();
     }
 
+    //***** getters
+    
     public int getNumCars() {
         return numCars;
     }
@@ -125,7 +129,7 @@ public class OV {
         return circuitLength;
     }
 
-    public Car getCars(int i) {
+    public Car getCar(int i) {
         return cars.get(i);
     }
 
