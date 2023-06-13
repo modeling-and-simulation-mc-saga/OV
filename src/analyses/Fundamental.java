@@ -4,8 +4,9 @@ import java.awt.geom.Point2D;
 
 import java.util.List;
 import abstractModel.OV;
+import java.util.ArrayList;
+import java.util.Collections;
 
-import myLib.utils.Utils;
 
 /**
  * Fundamental Diagram
@@ -15,10 +16,10 @@ import myLib.utils.Utils;
 public class Fundamental {
 
     final private double circuitLength;
-    private final int tRelax;//緩和のためのstep数
+    private final int tRelax;//time steps for relaxation
     private final OV ov;
     private final int tstep;
-    private final double dt;//RUnge-Kuttaの時間幅
+    private final double dt;//time step in Runge-Kutta
 
     public Fundamental(int tRelex, OV ov, double dt, int tstep) {
         System.out.println(tRelex);
@@ -30,22 +31,24 @@ public class Fundamental {
     }
 
     /**
-     * 実際に基本図を作る 
+     * Generating fundamental diagram 
      * 
-     * 車両数をnumCarFromからnumCarToまで、numCarStep毎に変化
+     * Changing the number of cars from numCarFrom to numCarTo
      * 
-     * 各車両数に対してnumRepeat回の観測を平均
-     *
+     * increasing steps of the number of cars
+     * 
+     * Averages are taken over numRepeat runs
+     * 
      * @param numCarFrom
      * @param numCarTo
      * @param numCarStep
-     * @param numRepeat
+     * @param numRepeat 
      * @return
      */
     public List<Point2D.Double> doExec(int numCarFrom, int numCarTo,
             int numCarStep, int numRepeat) {
         int num = numCarFrom;
-        List<Point2D.Double> data = Utils.createList();
+        List<Point2D.Double> data = Collections.synchronizedList(new ArrayList<>());
         while (num < numCarTo) {
             ov.changeNumCars(num);
             ov.ovInit();
